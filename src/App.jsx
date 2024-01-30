@@ -21,7 +21,18 @@ const addClock = (setClocks) => {
 };
 
 function App() {
-  const [clocks, setClocks] = useLocalStorage("clocks2", []);
+  const [clocks, setClocks] = useLocalStorage("clocks2", [
+    {
+      key: Math.random(),
+      title: "Add Title",
+      desc: "Add Description",
+      seconds: 0,
+      minutes: 0,
+      hours: 0,
+      startTime: -1,
+      isClockTicking: false,
+    },
+  ]);
   const updateClock = useCallback((index, newClockData) => {
     setClocks((prevClocks) =>
       prevClocks.map((clock, i) =>
