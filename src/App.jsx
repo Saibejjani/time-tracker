@@ -9,8 +9,8 @@ const addClock = (setClocks) => {
     ...prev,
     {
       key: Math.random(),
-      title: "edit this title",
-      desc: "this is temp desc",
+      title: "Add Title",
+      desc: "Add Description",
       seconds: 0,
       minutes: 0,
       hours: 0,
