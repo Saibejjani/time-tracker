@@ -106,7 +106,7 @@ const Clock = ({
           className="border-gray-800  flex flex-row justify-center p-10 gap-2 md:flex-col"
           style={{ boxShadow: "0 0 5px #aaa inset", borderRadius: "10px" }}
         >
-          {createdAt != -1 && (
+          {createdAt != -1 && !!createdAt && (
             <Badge className={"absolute top-2 left-2"}>
               {createdAt.toString().slice(4, 15) +
                 " : " +
