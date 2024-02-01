@@ -2,6 +2,8 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
+import { Badge } from "./ui/badge";
+import { closeIcon, pauseIcon, playIcon, resetIcon } from "@/assets";
 
 const Clock = ({
   title,
@@ -18,11 +20,13 @@ const Clock = ({
 }) => {
   const [isTitleEditing, setIsTitleEditing] = useState(false);
   const [isDescEditing, setIsDescEditing] = useState(false);
-
+  const [removeClock, setRemoveClock] = useState(false);
+  const [addClock, setAddClock] = useState(true);
   const startStopTimer = () => {
     if (!isClockTicking) {
       updateClock(index, { startTime: Date.now(), isClockTicking: true });
-      if (createdAt === -1) updateClock(index, { createdAt: new Date() });
+      if (createdAt === -1)
+        updateClock(index, { createdAt: new Date().toString() });
     } else updateClock(index, { isClockTicking: false });
   };
 
@@ -83,8 +87,15 @@ const Clock = ({
       });
     }
   }, []);
+  useEffect(() => {
+    setAddClock(false);
+  }, []);
   return (
-    <div className={`w-[80%] relative my-5 transition delay-75 ease-out `}>
+    <div
+      className={`w-[80%] relative sm:w-[90%] mb-5 max-w-[1400px] transition duration-1000 ${
+        removeClock && "opacity-0 scale-0"
+      }  ${addClock && "opacity-0 scale-0"}`}
+    >
       <div
         style={{
           boxShadow: "0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.26)",
@@ -92,35 +103,56 @@ const Clock = ({
         }}
       >
         <div
-          className="border-gray-800  flex flex-row justify-center p-10  "
+          className="border-gray-800  flex flex-row justify-center p-10 gap-2 md:flex-col"
           style={{ boxShadow: "0 0 5px #aaa inset", borderRadius: "10px" }}
         >
+          {createdAt != -1 && (
+            <Badge className={"absolute top-2 left-2"}>
+              {createdAt.toString().slice(4, 15) +
+                " : " +
+                createdAt.toString().slice(15, 21)}
+            </Badge>
+          )}
           <div className="grow">
-            {new Date(createdAt).toString().slice(0, 25)}
-            <h1 className="text-9xl ">
+            <h1 className="text-9xl md:text-8xl sm:text-7xl xs:text-5xl text-center ">
               {hours < 10 ? "0" + hours : hours}:
               {minutes < 10 ? "0" + minutes : minutes}:
               {seconds < 10 ? "0" + seconds : seconds}
             </h1>
             <div className="flex justify-center gap-7 pt-5">
-              <Button onClick={startStopTimer}>Start / Stop</Button>
-              <Button disabled={isClockTicking} onClick={resetTimer}>
-                Reset
+              <Button onClick={startStopTimer} variant="outline">
+                <img
+                  src={isClockTicking ? pauseIcon : playIcon}
+                  alt="play pause button"
+                  width={24}
+                />
+              </Button>
+              <Button
+                disabled={isClockTicking}
+                onClick={resetTimer}
+                variant="outline"
+              >
+                <img src={resetIcon} width={24} alt="reset button " />
               </Button>
             </div>
           </div>
-          <div className="w-[40%] flex flex-col">
+          <div className="w-[40%] flex flex-col md:w-[100%] md:mt-5">
             <Button
               variant="ghost"
               className="absolute right-1 top-1"
               onClick={() => {
-                setClocks((prev) => prev.filter((_, i) => i !== index));
+                setRemoveClock(true);
+                setTimeout(
+                  () => setClocks((prev) => prev.filter((_, i) => i !== index)),
+                  500
+                );
               }}
             >
-              X
+              <img src={closeIcon} alt="" width={20} />
             </Button>
             {isTitleEditing ? (
               <Input
+                autofocus={true}
                 type="text"
                 className="text-3xl font-semibold"
                 value={title}
@@ -144,6 +176,7 @@ const Clock = ({
 
             {isDescEditing ? (
               <Textarea
+                autofocus={true}
                 type="text"
                 className="text-xl font-thin h-max"
                 value={desc}

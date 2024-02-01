@@ -8,7 +8,7 @@ const addClock = (setClocks) => {
   setClocks((prev) => [
     ...prev,
     {
-      key: Math.random(),
+      key: Math.random().toString(36).substring(7),
       title: "Add Title",
       desc: "Add Description",
       seconds: 0,
@@ -45,7 +45,7 @@ function App() {
 
   return (
     <div className="">
-      <div className={`flex items-center flex-col mt-24 mb-24  `}>
+      <div className={`flex items-center flex-col mt-24 mb-24 clock  `}>
         {clocks?.map((val, i) => (
           <Clock
             {...val}
@@ -55,6 +55,7 @@ function App() {
             setClocks={setClocks}
           />
         ))}
+
         <Button
           className="mt-7"
           variant="outline"
