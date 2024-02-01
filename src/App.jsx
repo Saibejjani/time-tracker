@@ -16,6 +16,7 @@ const addClock = (setClocks) => {
       hours: 0,
       startTime: -1,
       isClockTicking: false,
+      createdAt: -1,
     },
   ]);
 };
@@ -31,6 +32,7 @@ function App() {
       hours: 0,
       startTime: -1,
       isClockTicking: false,
+      createdAt: -1,
     },
   ]);
   const updateClock = useCallback((index, newClockData) => {
@@ -43,7 +45,7 @@ function App() {
 
   return (
     <div className="">
-      <div className="flex items-center flex-col mt-24 mb-24">
+      <div className={`flex items-center flex-col mt-24 mb-24  `}>
         {clocks?.map((val, i) => (
           <Clock
             {...val}

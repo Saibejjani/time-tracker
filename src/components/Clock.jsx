@@ -14,14 +14,16 @@ const Clock = ({
   isClockTicking,
   startTime,
   setClocks,
+  createdAt,
 }) => {
   const [isTitleEditing, setIsTitleEditing] = useState(false);
   const [isDescEditing, setIsDescEditing] = useState(false);
 
   const startStopTimer = () => {
-    if (!isClockTicking)
+    if (!isClockTicking) {
       updateClock(index, { startTime: Date.now(), isClockTicking: true });
-    else updateClock(index, { isClockTicking: false });
+      if (createdAt === -1) updateClock(index, { createdAt: new Date() });
+    } else updateClock(index, { isClockTicking: false });
   };
 
   const resetTimer = () => {
@@ -82,7 +84,7 @@ const Clock = ({
     }
   }, []);
   return (
-    <div className="w-[80%] relative my-5">
+    <div className={`w-[80%] relative my-5 transition delay-75 ease-out `}>
       <div
         style={{
           boxShadow: "0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.26)",
@@ -90,10 +92,11 @@ const Clock = ({
         }}
       >
         <div
-          className="border-gray-800  flex flex-row justify-center p-10 rounded-sm "
+          className="border-gray-800  flex flex-row justify-center p-10  "
           style={{ boxShadow: "0 0 5px #aaa inset", borderRadius: "10px" }}
         >
           <div className="grow">
+            {new Date(createdAt).toString().slice(0, 25)}
             <h1 className="text-9xl ">
               {hours < 10 ? "0" + hours : hours}:
               {minutes < 10 ? "0" + minutes : minutes}:
